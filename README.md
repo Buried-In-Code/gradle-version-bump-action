@@ -23,21 +23,18 @@ jobs:
         with:
           fetch-depth: 1
       - name: Major bump
-        id: major-bump
         if: contains(github.event.pull_request.labels.*.name, "major")
         uses: Buried-In-Code/gradle-version-bump-action@v1
         with:
           github-token: ${{ secrets.github_token }}
           bump-mode: major
       - name: Minor bump
-        id: minor-bump
         if: contains(github.event.pull_request.labels.*.name, "minor")
         uses: Buried-In-Code/gradle-version-bump-action@v1
         with:
           github-token: ${{ secrets.github_token }}
           bump-mode: minor
       - name: Patch bump
-        id: patch-bump
         if: contains(github.event.pull_request.labels.*.name, "patch")
         uses: Buried-In-Code/gradle-version-bump-action@v1
         with:
