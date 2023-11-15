@@ -18,25 +18,27 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
         with:
-          fetch-depth: 1
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
       - name: Major bump
         if: contains(github.event.pull_request.labels.*.name, "major")
-        uses: Buried-In-Code/gradle-version-bump-action@v1
+        uses: Buried-In-Code/gradle-version-bump-action@v1.1.0
         with:
           github-token: ${{ secrets.github_token }}
           bump-mode: major
       - name: Minor bump
         if: contains(github.event.pull_request.labels.*.name, "minor")
-        uses: Buried-In-Code/gradle-version-bump-action@v1
+        uses: Buried-In-Code/gradle-version-bump-action@v1.1.0
         with:
           github-token: ${{ secrets.github_token }}
           bump-mode: minor
       - name: Patch bump
         if: contains(github.event.pull_request.labels.*.name, "patch")
-        uses: Buried-In-Code/gradle-version-bump-action@v1
+        uses: Buried-In-Code/gradle-version-bump-action@v1.1.0
         with:
           github-token: ${{ secrets.github_token }}
           bump-mode: patch
@@ -45,7 +47,7 @@ jobs:
 ## Supported Arguments
  - `github-token`: Can either be the default token, _as seen above_, or a personal access token with write access to the repository.
  - `git-email`: The email address each commit should be associated with. **Default**: 6057651+github-actions[bot]@users.noreply.github.com
- - `git-username`: The username each commit should be associated with. **Default**: Github-Actions[bot]
+ - `git-username`: The username each commit should be associated with. **Default**: github-actions[bot]
  - `bump-mode`: Mode for version bump. **Options**: major, minor, patch. **Default**: patch
 
 ## Outputs

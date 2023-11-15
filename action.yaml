@@ -20,9 +20,9 @@ inputs:
   git-username:
     description: |
       The username each commit should be associated with.
-      Default is Github-Actions[bot]
+      Default is github-actions[bot]
     required: true
-    default: 'Github-Actions[bot]'
+    default: 'github-actions[bot]'
   bump-mode:
     description: |
       Mode for version bump [major,minor,patch].
