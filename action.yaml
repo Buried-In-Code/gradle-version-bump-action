@@ -4,7 +4,7 @@ author: 'Buried-In-Code'
 description: 'A simple GitHub Action to bump the version of Gradle projects.'
 
 branding:
-  color: 'teal'
+  color: 'blue'
   icon: 'tag'
 
 inputs:
