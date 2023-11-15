@@ -1,0 +1,66 @@
+# ref: https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
+name: 'Gradle Version Bump'
+author: 'Buried-In-Code'
+description: 'A simple GitHub Action to bump the version of Gradle projects.'
+
+branding:
+  color: 'teal'
+  icon: 'tag'
+
+inputs:
+  github-token:
+    description: 'A GitHub auth token to be able to create the commit.'
+    required: true
+  git-email:
+    description: |
+      The email address each commit should be associated with.
+      Default is 6057651+github-actions[bot]@users.noreply.github.com
+    required: true
+    default: '6057651+github-actions[bot]@users.noreply.github.com'
+  git-username:
+    description: |
+      The username each commit should be associated with.
+      Default is Github-Actions[bot]
+    required: true
+    default: 'Github-Actions[bot]'
+  bump-mode:
+    description: |
+      Mode for version bump [major,minor,patch].
+      Default is patch.
+    required: false
+    default: 'patch'
+
+outputs:
+  before-version:
+    description: 'The version before running this action.'
+    value: ${{ steps.before-version.outputs.version }}
+  after-version:
+    description: 'The version after running this action.'
+    value: ${{ steps.after-version.outputs.version }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Output before bump
+      id: before-version
+      shell: bash
+      run: echo "version=$($GITHUB_ACTION_PATH/src/get-version.sh)" >> $GITHUB_OUTPUT
+
+    - name: Bump Version
+      env:
+        TOKEN: ${{ inputs.github-token }}
+        EMAIL: ${{ inputs.git-email }}
+        NAME: ${{ inputs.git-username }}
+        MODE: ${{ inputs.bump-mode }}
+      run: ${{github.action_path}}/src/version-bump.sh
+      shell: bash
+
+    - name: Output after bump
+      id: after-version
+      shell: bash
+      run: echo "version=$($GITHUB_ACTION_PATH/src/get-version.sh)" >> $GITHUB_OUTPUT
+
+    - name: Result
+      shell: bash
+      if: ${{ steps.before-version.outputs.version }} != ${{ steps.after-version.outputs.version }}
+      run: "echo 'Version has been bumped to ${{ steps.after-version.outputs.version }}'"
